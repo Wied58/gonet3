@@ -21,12 +21,14 @@ raspistill_tl = 2000
 
 
 # shuter speed (exposure time) in microseconds
-raspistill_ss = 2000000 
+#raspistill_ss = 2000000 
+raspistill_ss = 6000000 
 
 # total time of the run in milliseconds (controls how many photos you take)
 # Exposure time converted to milliseconds + interval between images X number of images + an extra interval
 #raspistill_t = (((raspistill_ss/1000) + raspistill_tl) * (number_of_images +1)) 
-raspistill_t = (((raspistill_ss/1000) + raspistill_tl) * (number_of_images)) 
+#raspistill_t = (((raspistill_ss/1000) + raspistill_tl) * (number_of_images)) 
+raspistill_t = 65000
 
 
 scratch_dir = "/home/pi/Tools/Camera/scratch/"
@@ -397,7 +399,7 @@ command = ['/usr/bin/raspistill', '-v',
                          '-tl', str(raspistill_tl),
                          '-ISO', '800',
                          '-drc', 'off',
-                         '-awb', 'sun',
+                         '-awb', 'off',
                          '-br', '50',
                          '-r',
                          '-ts',
