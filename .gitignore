@@ -1,0 +1,10 @@
+dejavu
+scratch
+._*
+gonet.log
+GPS
+GPS/*
+cron.out
+dejavu
+gga.log
+nmea_checksum.py
