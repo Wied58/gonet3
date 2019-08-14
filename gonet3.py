@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import serial
 import subprocess
@@ -46,7 +46,7 @@ image_dir = "/home/pi/images/"
 port = "/dev/serial0"
 ser = serial.Serial(port, baudrate = 9600, timeout = 0.5)
 
-data = ser.read_until() 
+data = ser.read_until().decode() 
 sdata = data.split(",")
 if sdata[0] == '$GPRMC' and sdata[2] != 'V':
 
@@ -78,7 +78,7 @@ if sdata[0] == '$GPRMC' and sdata[2] != 'V':
      elif sdate[2:4] == '12':
      	smonth = "DEC"
      
-     print sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6]
+     print (sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6])
      date_time = sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6]
      
      
@@ -95,7 +95,7 @@ if sdata[0] == '$GPRMC' and sdata[2] != 'V':
 ##### End of setting sysdate #####
 
 run_start_time = time.time()
-print "run_start_time = " + str(run_start_time)
+print ("run_start_time = " + str(run_start_time))
 
 logfile = open("/home/pi/Tools/Camera/gonet.log","a+")
 logfile.write("run_start_time = " + str(run_start_time) +"\n")
@@ -225,61 +225,62 @@ def nmea_cksum(data):
 start_looking_for_GPS_time  = time.time()
 setup_time = str(start_looking_for_GPS_time - run_start_time)
 
-print "setup_time = " + setup_time
+print ("setup_time = " + setup_time)
 logfile.write("setup_time = " + setup_time + "\n")
 
 os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Imaging...) &")
 
-print  "Looking for GPS Data"
+print  ("Looking for GPS Data")
 logfile.write("Looking for GPS Data" + "\n")
 
 #while True:
 gps_time_out = 0
 while  gps_time_out < 35:
    time.sleep(1.0)
-   data = ser.read_until() 
-   sdata = data.split(",")
+   data = ser.readline().decode('utf_8') 
+   #data = ser.read_until()
+   sdata = data.split(',')
 
    if sdata[0] == "$GPGGA" and sdata[6] in ("1","2"):
           if nmea_cksum(data):
 
-              print "GPS Checksum Passed"
+              print ("GPS Checksum Passed")
               logfile.write("GPS Checksum Passed" + "\n")
 
               for fl in glob.glob("/home/pi/Tools/Camera/GPS/GPGGA*"):
                     os.remove(fl)
     
               filename = "/home/pi/Tools/Camera/GPS/" + data[1:]
-              mode = 0644
+              mode = 0o644
               os.mknod(filename, mode)
     
-              print filename,
+              print (filename,)
               logfile.write(filename)
  
               raw_gps_fix  = parse_gga(sdata)
               gps_flag = 2
               break 
           else:
-              print "GPS Checksum Failed"
+              print ("GPS Checksum Failed")
     # end of if sdata[0] == "$GPGGA" and sdata[6] in ("1","2")
 
    elif sdata[0] == "$GPGGA" and sdata[6] == "0":
          if nmea_cksum(data):
 
-             print "GPS Checksum Passed"
+             print ("GPS Checksum Passed")
              logfile.write("GPS Checksum Passed\n")
 
              for fl in glob.glob("/home/pi/Tools/Camera/GPS/GPGGA*"):
                    os.remove(fl)
     
              filename = "/home/pi/Tools/Camera/GPS/" + data[1:]
-             mode = 0644
+             mode = 0o644
              os.mknod(filename, mode)
     
-             print filename,
+             print (filename,)
              logfile.write(filename)
  
-             print gps_time_out
+             print (gps_time_out)
              logfile.write(str(gps_time_out) + "\n")
        
              if  gps_time_out>= 25:
@@ -288,7 +289,7 @@ while  gps_time_out < 35:
                   gps_flag = 1
                   break
          else:
-             print "GPS Checksum Failed"
+             print ("GPS Checksum Failed")
              logfile.write("GPS Checksum Failed" + "\n")
                  
    gps_flag = 0
@@ -298,7 +299,7 @@ while  gps_time_out < 35:
 
 ser.close()
 
-print "gps_flag = " + str(gps_flag)
+print ("gps_flag = " + str(gps_flag))
 logfile.write("gps_flag = " + str(gps_flag) + "\n")
 
 ##### done with gps #####
@@ -310,14 +311,14 @@ logfile.write("gps_flag = " + str(gps_flag) + "\n")
 
 start_GPS_string_manipulation_time = time.time()
 gps_aquisition = str(start_GPS_string_manipulation_time - start_looking_for_GPS_time)
-print "gps_aquisition = " + gps_aquisition
+print ("gps_aquisition = " + gps_aquisition)
 logfile.write("gps_aquisition = " + gps_aquisition + "\n")
 
 if gps_flag == 0:
 
    image_gps_fix = "GPS Not Available"
 
-   print "GPS Not Responsive, proceeding to collect images."
+   print ("GPS Not Responsive, proceeding to collect images.")
    logfile.write("GPS Not Responsive, proceeding to collect images.")
 
    exif_lat = '00/1,00/1,00.00/1'
@@ -327,14 +328,14 @@ if gps_flag == 0:
          os.remove(fl)
 
    filename = "/home/pi/Tools/Camera/GPS/GPGGA,ERROR" 
-   mode = 0644
+   mode = 0o644
    os.mknod(filename, mode)
 
 if gps_flag == 1:
 
    image_gps_fix = "GPS Fix Not Available"
 
-   print "GPS Not Fix Available, proceeding to collect images."
+   print ("GPS Not Fix Available, proceeding to collect images.")
    logfile.write("GPS Not Fix Available, proceeding to collect images.")
 
    exif_lat = '00/1,00/1,00.00/1'
@@ -345,9 +346,9 @@ if gps_flag == 1:
 if gps_flag == 2:
 
    image_gps_fix = convert_raw_gps_fix_to_image_gps_fix(raw_gps_fix)
-   print "Raw GPS Data = " + raw_gps_fix
+   print ("Raw GPS Data = " + raw_gps_fix)
    logfile.write("Raw GPS Data = " + raw_gps_fix + "\n")
-#   print "Processed GPS Data = " + image_gps_fix
+#   print ("Processed GPS Data = " + image_gps_fix)
 #   logfile.write("Processed GPS Data = " + image_gps_fix + "\n")
    
    exif_lat = convert_raw_gps_fix_to_exif_lat(raw_gps_fix)
@@ -361,7 +362,7 @@ if gps_flag == 2:
 
 start_create_image_tag_time = time.time()
 gps_string_manipulation = str(start_create_image_tag_time - start_GPS_string_manipulation_time)
-print "gps_string_manipulation = " + gps_string_manipulation
+print ("gps_string_manipulation = " + gps_string_manipulation)
 logfile.write("gps_string_manipulation = " + gps_string_manipulation + "\n")
 
 #Create image of a rectangle for text background
@@ -386,11 +387,11 @@ img.rotate(90,expand = True).save(scratch_dir + 'foreground.jpeg', 'JPEG')
 
 start_imaging_time = time.time()
 create_image_tag = str(start_imaging_time - start_create_image_tag_time)
-print "create_image_tag = " + create_image_tag
+print ("create_image_tag = " + create_image_tag)
 logfile.write("create_image_tag = " + create_image_tag + "\n")
 
 image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%m%d%y_%H%M%S", gmtime())) + "_%03d"
-print "image_file_name = " + image_file_name
+print ("image_file_name = " + image_file_name)
 logfile.write("image_file_name = " + image_file_name + "\n")
 
 command = ['/usr/bin/raspistill', '-v',
@@ -414,7 +415,7 @@ subprocess.call(command)
 
 start_post_processing_time = time.time()
 imaging_time = str(start_post_processing_time - start_imaging_time)
-print "imaging_time = " + imaging_time
+print ("imaging_time = " + imaging_time)
 logfile.write("imaging_time = " + imaging_time + "\n")
 
 photo_count = 0 
@@ -423,7 +424,7 @@ photo_count = 0
 for filename in os.listdir(scratch_dir):
    if filename.endswith(".jpg"):
      sfilename = filename.split("_")
-     print scratch_dir + filename
+     print (scratch_dir + filename)
      logfile.write(scratch_dir + filename + "\n")
      #logfile.write(scratch_dir + filename + "\n")
 
@@ -449,7 +450,7 @@ for filename in os.listdir(scratch_dir):
      photo_count += 1
    ##### End of .jpg if
 ##### End of filename in directory for
-print "photo_count = " + str(photo_count)
+print ("photo_count = " + str(photo_count))
 logfile.write("photo_count = " + str(photo_count) + "\n")
 
 os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Ready) &")
@@ -457,39 +458,18 @@ os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Ready) &
 
 finish_time = time.time()
 post_processing_time = str(finish_time - start_post_processing_time)
-print "post_processing_time = " + post_processing_time
+print ("post_processing_time = " + post_processing_time)
 logfile.write("post_processing_time = " + post_processing_time + "\n")
 
 
-#print "run_start_time = " + str(run_start_time)
-#print "start_looking_for_GPS_time = " + str(start_looking_for_GPS_time)
-#print "start_GPS_string_manipulation_time = " + str(start_GPS_string_manipulation_time)
-#print "start_create_image_tag_time = " + str(start_create_image_tag_time)
-#print "start_imaging_time = " + str(start_imaging_time)
-#print "start_post_processing_time = " + str(start_post_processing_time)
-#print "finish_time = " + str(finish_time)
-
-
-#post_processing_time = (time.time()
-#print "post_processing_time = " + str(post_processing_time)
-
-
-#print "gps_aquisition = " + gps_aquisition
-#
-#print "gps_string_manipulation = " + gps_string_manipulation
-#
-#print "create_image_tag = " + create_image_tag
-#
-#print "imaging_time =" + imaging_time
-#
-#print "post_processing_time = " + post_processing_time
 
 total_run_time = str(finish_time - run_start_time)
-print "total_time = " + total_run_time
+print ("total_time = " + total_run_time)
 logfile.write("total_time = " + total_run_time + "\n")
 
-print "perf," + str(run_start_time) + "," + setup_time + "," + gps_aquisition + "," + gps_string_manipulation + "," + create_image_tag + "," + imaging_time + "," + post_processing_time + "," + total_run_time + "," + str(gps_flag) + "," + str(photo_count)
-print ""
+print ("perf," + str(run_start_time) + "," + setup_time + "," + gps_aquisition + "," + gps_string_manipulation + "," + create_image_tag + "," + imaging_time + "," + post_processing_time + "," + total_run_time + "," + str(gps_flag) + "," + str(photo_count))
+print ("")
+
 logfile.write("perf," + str(run_start_time) + "," + setup_time + "," + gps_aquisition + "," + gps_string_manipulation + "," + create_image_tag + "," + imaging_time + "," + post_processing_time + "," + total_run_time + "," + str(gps_flag) + "," + str(photo_count) + "\n")
 logfile.write("\n")
 
