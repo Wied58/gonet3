@@ -13,16 +13,30 @@ import re
 from collections import deque
 
 
+# shutter speed (exposure time) in microseconds
+raspistill_ss = 6000000 
+
 #How many images do want?
 number_of_images = 3
+
+# Sensitivity (ISO)
+ISO = 800
+
+#Dynamic Range Compression (DRC) options :off,low,med,high
+drc = 'off'
+
+#White Balance: off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon
+awb = 'off'
+
+
+#Brightness
+br = 50
+
 
 #interval between images in milliseconds
 raspistill_tl = 2000
 
 
-# shuter speed (exposure time) in microseconds
-#raspistill_ss = 2000000 
-raspistill_ss = 6000000 
 
 # total time of the run in milliseconds (controls how many photos you take)
 # Exposure time converted to milliseconds + interval between images X number of images + an extra interval
@@ -46,7 +60,7 @@ image_dir = "/home/pi/images/"
 port = "/dev/serial0"
 ser = serial.Serial(port, baudrate = 9600, timeout = 0.5)
 
-data = ser.read_until().decode() 
+data = ser.read_until().decode('utf_8') 
 sdata = data.split(",")
 if sdata[0] == '$GPRMC' and sdata[2] != 'V':
 
@@ -401,10 +415,10 @@ command = ['/usr/bin/raspistill', '-v',
                          '-t', str(raspistill_t),
                          '-ss', str(raspistill_ss),
                          '-tl', str(raspistill_tl),
-                         '-ISO', '800',
-                         '-drc', 'off',
-                         '-awb', 'off',
-                         '-br', '50',
+                         '-ISO', str(ISO),
+                         '-drc', str(drc),
+                         '-awb', awb,
+                         '-br', str(br),
                          '-r',
                          '-ts',
                          '-x', 'GPS.GPSLatitude=' + exif_lat,
