@@ -16,6 +16,8 @@ from collections import deque
 # shutter speed (exposure time) in microseconds
 raspistill_ss = 6000000 
 
+tag_raspistill_ss = str(round(raspistill_ss/1000000, 2))
+
 #How many images do want?
 number_of_images = 3
 
@@ -26,7 +28,7 @@ ISO = 800
 drc = 'off'
 
 #White Balance: off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon
-awb = 'off'
+awb = 'sun'
 
 
 #Brightness
@@ -395,9 +397,10 @@ d = ImageDraw.Draw(img)
 version  = os.listdir('/home/pi/Tools/Version')
 
 # White Text
-d.text((20,10), "Adler / Far Horizons GONet " + ' '.join(version) + " hostname: " + socket.gethostname(), font=font, fill=(255,255,255))
+d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + ''.join(version) + " Exp: " + tag_raspistill_ss + " S"\
++ " ISO: " + str(ISO) + " WB: " + awb , font=font, fill=(255,255,255))
 # Next Line 
-d.text((20,70), strftime("%m-%d-%Y %H:%M:%S", gmtime()) + " UTC " + image_gps_fix, font=font, fill=(255,255,255))
+d.text((20,70), strftime("%m-%d-%Y %H:%M:%S", gmtime()) + " UTC " + image_gps_fix , font=font, fill=(255,255,255))
 img.rotate(90,expand = True).save(scratch_dir + 'foreground.jpeg', 'JPEG')
      
 # take a picture with pi cam!
