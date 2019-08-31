@@ -66,6 +66,9 @@ data = ser.read_until().decode('utf_8')
 sdata = data.split(",")
 if sdata[0] == '$GPRMC' and sdata[2] != 'V':
 
+     print ("We have a valid $GPRMC fix, setting system time from GPS")
+     print (data)
+
      sdate = sdata[9]
      stime = sdata[1]
      
