@@ -394,10 +394,10 @@ d = ImageDraw.Draw(img)
 # Black Text
 #d.text((20,10), "Adler / Far Horizons GONet hostname: " + socket.gethostname(), font=font, fill=(0,0,0)) 
 
-version  = os.listdir('/home/pi/Tools/Version')
+version  = ''.join(os.listdir('/home/pi/Tools/Version'))
 
 # White Text
-d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + ''.join(version) + " Exp: " + tag_raspistill_ss + " S"\
+d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + version + " Exp: " + tag_raspistill_ss + " S"\
 + " ISO: " + str(ISO) + " WB: " + awb , font=font, fill=(255,255,255))
 # Next Line 
 d.text((20,70), strftime("%m-%d-%Y %H:%M:%S", gmtime()) + " UTC " + image_gps_fix , font=font, fill=(255,255,255))
@@ -428,6 +428,7 @@ command = ['/usr/bin/raspistill', '-v',
                          '-x', 'GPS.GPSLatitudeRef=' + "N",
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
                          '-x', 'GPS.GPSLongitudeRef=' + "W",
+#                         '-x', 'Author' + ''.join(version),
                          '-o', scratch_dir + image_file_name + '.jpg']
 subprocess.call(command)
 
