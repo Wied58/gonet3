@@ -62,6 +62,10 @@ image_dir = "/home/pi/images/"
 port = "/dev/serial0"
 ser = serial.Serial(port, baudrate = 9600, timeout = 0.5)
 
+print ("The sysdate at startup is: ")
+subprocess.call('date')
+
+
 data = ser.read_until().decode('utf_8') 
 sdata = data.split(",")
 if sdata[0] == '$GPRMC' and sdata[2] != 'V':
@@ -97,19 +101,27 @@ if sdata[0] == '$GPRMC' and sdata[2] != 'V':
      elif sdate[2:4] == '12':
      	smonth = "DEC"
      
-     print (sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6])
+     #print (sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6])
      date_time = sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6]
+     print (date_time) 
      
-     
+
      command = ['sudo', 'systemctl', 'stop', 'systemd-timesyncd.service']
      subprocess.call(command)
+
+     print("The sysdate before setting with GPS is:")
+     subprocess.call('date')
      
-     command = ['sudo', 'date', '-s', date_time]
+     command = ['sudo', 'date', '-s',  date_time]
+     print ("The command we are using to change the date is: " + ' '.join(command))
      subprocess.call(command)
+     
+     print("The sysdate aftersetting with GPS is:")
+     subprocess.call('date')
      
      command = ['sudo', 'systemctl', 'start', 'systemd-timesyncd.service']
      subprocess.call(command)
-     subprocess.call('date')
+     #subprocess.call('date')
 
 ##### End of setting sysdate #####
 
