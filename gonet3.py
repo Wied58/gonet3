@@ -398,6 +398,7 @@ d = ImageDraw.Draw(img)
 #d.text((20,10), "Adler / Far Horizons GONet hostname: " + socket.gethostname(), font=font, fill=(0,0,0)) 
 
 version  = ''.join(os.listdir('/home/pi/Tools/Version'))
+version  = ''.join(glob.glob(os.path.join('/home/pi/Tools/Version', '*'))).split("/")[5]
 
 # White Text
 d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + version + " Exp: " + tag_raspistill_ss + " S"\
