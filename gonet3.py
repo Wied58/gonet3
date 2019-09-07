@@ -459,8 +459,8 @@ command = ['/usr/bin/raspistill', '-v',
                          '-x', 'GPS.GPSLatitudeRef=' + "N",
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
                          '-x', 'GPS.GPSLongitudeRef=' + "W",
-                         '-x', 'IFD0.Artist=' + version,
-                         '-x', 'IFD0.Software=' + version, 
+                         #'-x', 'IFD0.Artist=GONet ' + version,
+                         '-x', 'IFD0.Software=GONet ' + version, 
                          '-o', scratch_dir + image_file_name + '.jpg']
 subprocess.call(command)
 
