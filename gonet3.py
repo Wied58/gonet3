@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw, ImageFont, ExifTags
 import glob
 import re
 from collections import deque
+import syslog
 
 
 # shutter speed (exposure time) in microseconds
@@ -66,62 +67,75 @@ print ("The sysdate at startup is: ")
 subprocess.call('date')
 
 
-data = ser.read_until().decode('utf_8') 
-sdata = data.split(",")
-if sdata[0] == '$GPRMC' and sdata[2] != 'V':
+i = 0
+while i < 5:
+   time.sleep(1.0)
+   data = ser.read_until().decode('utf_8') 
+   sdata = data.split(",")
+   if sdata[0] == '$GPRMC' and sdata[2] == 'V':
+        print (sdata)
+   elif sdata[0] == '$GPRMC' and sdata[2] != 'V':
 
-     print ("We have a valid $GPRMC fix, setting system time from GPS")
-     print (data)
+        sdate = sdata[9]
+        stime = sdata[1]
+        
+        if   sdate[2:4] == '01':
+        	smonth = "JAN"
+        elif sdate[2:4] == '02':
+        	smonth = "FEB"
+        elif sdate[2:4] == '03':
+        	smonth = "MAR"
+        elif sdate[2:4] == '04':
+        	smonth = "APR"
+        elif sdate[2:4] == '05':
+        	smonth = "MAY"
+        elif sdate[2:4] == '06':
+        	smonth = "JUN"
+        elif sdate[2:4] == '07':
+        	smonth = "JUL"
+        elif sdate[2:4] == '08':
+        	smonth = "AUG"
+        elif sdate[2:4] == '09':
+        	smonth = "SEP"
+        elif sdate[2:4] == '10':
+        	smonth = "OCT"
+        elif sdate[2:4] == '11':
+        	smonth = "NOV"
+        elif sdate[2:4] == '12':
+        	smonth = "DEC"
+        
+        print (sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6])
+        date_time = sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6]
+        
+        print ("Shutting down network time service")
+        command = ['sudo', 'systemctl', 'stop', 'systemd-timesyncd.service']
+        subprocess.call(command)
+        
+        print("The sysdate before setting with GPS is:")
+        subprocess.call('date')
 
-     sdate = sdata[9]
-     stime = sdata[1]
-     
-     if   sdate[2:4] == '01':
-     	smonth = "JAN"
-     elif sdate[2:4] == '02':
-     	smonth = "FEB"
-     elif sdate[2:4] == '03':
-     	smonth = "MAR"
-     elif sdate[2:4] == '04':
-     	smonth = "APR"
-     elif sdate[2:4] == '05':
-     	smonth = "MAY"
-     elif sdate[2:4] == '06':
-     	smonth = "JUN"
-     elif sdate[2:4] == '07':
-     	smonth = "JUL"
-     elif sdate[2:4] == '08':
-     	smonth = "AUG"
-     elif sdate[2:4] == '09':
-     	smonth = "SEP"
-     elif sdate[2:4] == '10':
-     	smonth = "OCT"
-     elif sdate[2:4] == '11':
-     	smonth = "NOV"
-     elif sdate[2:4] == '12':
-     	smonth = "DEC"
-     
-     #print (sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6])
-     date_time = sdate[0:2] + " " + smonth + " " +"20"+ sdate[4:7] + " " + stime[0:2] + ":" + stime[2:4] + ":" + stime[4:6]
-     print (date_time) 
-     
+        # Uncomment below for testing while on network.
+        # This "holds" the GPS time for 5 seconds. 
+        # If on a network the time will be set by the network, the GPS will set the time 5 seconds, but 5 seconds slow, then then when the network is
+        # restarted, the time will be proplerly set. 
+        #time.sleep(5.0)
 
-     command = ['sudo', 'systemctl', 'stop', 'systemd-timesyncd.service']
-     subprocess.call(command)
+        print ("Setting time via GPS.")
+        syslog.syslog("Setting time via GPS") 
+        command = ['sudo', 'date', '-s', date_time]
+        subprocess.call(command)
+        
+        print("The sysdate after setting with GPS is:")
+        subprocess.call('date')
 
-     print("The sysdate before setting with GPS is:")
-     subprocess.call('date')
-     
-     command = ['sudo', 'date', '-s',  date_time]
-     print ("The command we are using to change the date is: " + ' '.join(command))
-     subprocess.call(command)
-     
-     print("The sysdate aftersetting with GPS is:")
-     subprocess.call('date')
-     
-     command = ['sudo', 'systemctl', 'start', 'systemd-timesyncd.service']
-     subprocess.call(command)
-     #subprocess.call('date')
+        break
+
+   i += 1
+
+print ("restarting netwotk time servivce")
+command = ['sudo', 'systemctl', 'start', 'systemd-timesyncd.service']
+subprocess.call(command)
+subprocess.call('date')
 
 ##### End of setting sysdate #####
 
@@ -409,8 +423,9 @@ d = ImageDraw.Draw(img)
 # Black Text
 #d.text((20,10), "Adler / Far Horizons GONet hostname: " + socket.gethostname(), font=font, fill=(0,0,0)) 
 
-version  = ''.join(os.listdir('/home/pi/Tools/Version'))
+#version  = ''.join(os.listdir('/home/pi/Tools/Version'))
 version  = ''.join(glob.glob(os.path.join('/home/pi/Tools/Version', '*'))).split("/")[5]
+print (version)
 
 # White Text
 d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + version + " Exp: " + tag_raspistill_ss + " S"\
@@ -444,7 +459,8 @@ command = ['/usr/bin/raspistill', '-v',
                          '-x', 'GPS.GPSLatitudeRef=' + "N",
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
                          '-x', 'GPS.GPSLongitudeRef=' + "W",
-#                         '-x', 'Author' + ''.join(version),
+                         '-x', 'IFD0.Artist=' + version,
+                         '-x', 'IFD0.Software=' + version, 
                          '-o', scratch_dir + image_file_name + '.jpg']
 subprocess.call(command)
 
