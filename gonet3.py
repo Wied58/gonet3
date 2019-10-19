@@ -50,6 +50,7 @@ raspistill_t = 65000
 
 scratch_dir = "/home/pi/Tools/Camera/scratch/"
 image_dir = "/home/pi/images/"
+thumbs_dir = "/home/pi/thumbs/"
 
 # Here date and time is captured from GPS $GPRMC if available.
 # The time service from the network is shutdown, and system time is set from GPS value.
@@ -502,7 +503,7 @@ for filename in os.listdir(scratch_dir):
      # create thumnail here?
      MAX_SIZE = (160, 120) 
      background.thumbnail(MAX_SIZE)  
-     background.save(image_dir + "th_" + filename, 'JPEG')
+     background.save(thumbs_dir + "th_" + filename, 'JPEG')
 
      # clean up the scratch directory
      os.remove(scratch_dir + filename)
