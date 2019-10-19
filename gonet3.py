@@ -498,6 +498,12 @@ for filename in os.listdir(scratch_dir):
      composite_file = open(image_dir + filename, 'a') 
      subprocess.call(['tail', '-c', '10237440', scratch_dir + filename], stdout=composite_file)
 
+
+     # create thumnail here?
+     MAX_SIZE = (160, 120) 
+     background.thumbnail(MAX_SIZE)  
+     background.save(image_dir + "th_" + filename, 'JPEG')
+
      # clean up the scratch directory
      os.remove(scratch_dir + filename)
      photo_count += 1
