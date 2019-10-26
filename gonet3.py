@@ -219,6 +219,13 @@ def convert_raw_gps_fix_to_exif_lat(raw_gps_fix):
 
 ##### end of convert_raw_gps_fix_to_exif_lat #####
 
+def convert_raw_gps_fix_to_exif_lat_dir(raw_gps_fix):
+    print("I'm in convert_raw_gps_fix_to_exif_lat_dir")
+    return (raw_gps_fix.split(" "))[1]
+
+##### end of convert_raw_gps_fix_to_exif_lat_dir #####
+
+
 def convert_raw_gps_fix_to_exif_long(raw_gps_fix):
      raw_lat = (raw_gps_fix.split(" "))[2]
      deg = raw_lat[0:3]
@@ -228,6 +235,12 @@ def convert_raw_gps_fix_to_exif_long(raw_gps_fix):
      return deg + "/1," + min + "/1," + sec + "/1"
 
 ##### end of convert_raw_gps_fix_to_exif_long #####
+
+
+def convert_raw_gps_fix_to_exif_long_dir(raw_gps_fix):
+    return (raw_gps_fix.split(" "))[3]
+
+##### end of convert_raw_gps_fix_to_exif_long_dir #####
 
 def nmea_cksum(data):
      
@@ -368,7 +381,9 @@ if gps_flag == 0:
    logfile.write("GPS Not Responsive, proceeding to collect images.")
 
    exif_lat = '00/1,00/1,00.00/1'
+   exif_lat_dir = 'X'
    exif_long = '000/1,00/1,00.0000/1'
+   exif_long_dir = 'X' 
 
    for fl in glob.glob("/home/pi/Tools/Camera/GPS/GPGGA*"):
          os.remove(fl)
@@ -385,7 +400,9 @@ if gps_flag == 1:
    logfile.write("GPS Not Fix Available, proceeding to collect images.")
 
    exif_lat = '00/1,00/1,00.00/1'
+   exit_lat_dir = 'X'
    exif_long = '000/1,00/1,00.0000/1'
+   exit_long_dir = 'X'
 
 
 
@@ -398,7 +415,9 @@ if gps_flag == 2:
 #   logfile.write("Processed GPS Data = " + image_gps_fix + "\n")
    
    exif_lat = convert_raw_gps_fix_to_exif_lat(raw_gps_fix)
+   exif_lat_dir = convert_raw_gps_fix_to_exif_lat_dir(raw_gps_fix)
    exif_long = convert_raw_gps_fix_to_exif_long(raw_gps_fix)
+   exif_long_dir = convert_raw_gps_fix_to_exif_long_dir(raw_gps_fix)
 
 ##### done with gps string manipulation #####
 
@@ -442,7 +461,7 @@ create_image_tag = str(start_imaging_time - start_create_image_tag_time)
 print ("create_image_tag = " + create_image_tag)
 logfile.write("create_image_tag = " + create_image_tag + "\n")
 
-image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%m%d%y_%H%M%S", gmtime())) + "_%03d"
+image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%03d"
 print ("image_file_name = " + image_file_name)
 logfile.write("image_file_name = " + image_file_name + "\n")
 
@@ -457,9 +476,11 @@ command = ['/usr/bin/raspistill', '-v',
                          '-r',
                          '-ts',
                          '-x', 'GPS.GPSLatitude=' + exif_lat,
-                         '-x', 'GPS.GPSLatitudeRef=' + "N",
+                         #'-x', 'GPS.GPSLatitudeRef=' + "N",
+                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
-                         '-x', 'GPS.GPSLongitudeRef=' + "W",
+                         #'-x', 'GPS.GPSLongitudeRef=' + "W",
+                         '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
                          #'-x', 'IFD0.Artist=GONet ' + version,
                          '-x', 'IFD0.Software=GONet ' + version, 
                          '-o', scratch_dir + image_file_name + '.jpg']
