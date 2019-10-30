@@ -400,9 +400,9 @@ if gps_flag == 1:
    logfile.write("GPS Not Fix Available, proceeding to collect images.")
 
    exif_lat = '00/1,00/1,00.00/1'
-   exit_lat_dir = 'X'
+   exif_lat_dir = 'X'
    exif_long = '000/1,00/1,00.0000/1'
-   exit_long_dir = 'X'
+   exif_long_dir = 'X'
 
 
 
