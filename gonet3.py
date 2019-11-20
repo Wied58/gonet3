@@ -545,6 +545,10 @@ logfile.write("photo_count = " + str(photo_count) + "\n")
 
 os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Ready) &")
 
+for filename in os.listdir(scratch_dir):
+    print("Cleaning scratch dir: " + filename)
+    os.remove(scratch_dir + filename)
+
 
 finish_time = time.time()
 post_processing_time = str(finish_time - start_post_processing_time)
