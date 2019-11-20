@@ -475,12 +475,10 @@ command = ['/usr/bin/raspistill', '-v',
                          '-br', str(br),
                          '-r',
                          '-ts',
-                         '-x', 'GPS.GPSLatitude=' + exif_lat,
-                         #'-x', 'GPS.GPSLatitudeRef=' + "N",
-                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
-                         #'-x', 'GPS.GPSLongitudeRef=' + "W",
                          '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
+                         '-x', 'GPS.GPSLatitude=' + exif_lat,
+                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
                          #'-x', 'IFD0.Artist=GONet ' + version,
                          '-x', 'IFD0.Software=GONet ' + version, 
                          '-o', scratch_dir + image_file_name + '.jpg']
@@ -508,6 +506,8 @@ for filename in os.listdir(scratch_dir):
 
      # save its exif -  does not include raw (bayer) data
      exif = background.info['exif']
+
+     print(exif)
 
      # open foreground.jpg and paste it to pi cam image
      foreground = Image.open(scratch_dir + "foreground.jpeg")
