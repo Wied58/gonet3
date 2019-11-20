@@ -242,6 +242,13 @@ def convert_raw_gps_fix_to_exif_long_dir(raw_gps_fix):
 
 ##### end of convert_raw_gps_fix_to_exif_long_dir #####
 
+
+
+def convert_raw_gps_fix_to_exif_alt(raw_gps_fix):
+    return (raw_gps_fix.split(" "))[4]
+
+##### end of convert_raw_gps_fix_to_exif_alt #####
+
 def nmea_cksum(data):
      
      # http://doschman.blogspot.com/2013/01/calculating-nmea-sentence-checksums.html
@@ -418,6 +425,7 @@ if gps_flag == 2:
    exif_lat_dir = convert_raw_gps_fix_to_exif_lat_dir(raw_gps_fix)
    exif_long = convert_raw_gps_fix_to_exif_long(raw_gps_fix)
    exif_long_dir = convert_raw_gps_fix_to_exif_long_dir(raw_gps_fix)
+   exif_alt = convert_raw_gps_fix_to_exif_alt(raw_gps_fix)
 
 ##### done with gps string manipulation #####
 
@@ -479,6 +487,7 @@ command = ['/usr/bin/raspistill', '-v',
                          '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
                          '-x', 'GPS.GPSLatitude=' + exif_lat,
                          '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
+                         '-x', 'GPS.GPSAltitude=' + exif_alt,
                          #'-x', 'IFD0.Artist=GONet ' + version,
                          '-x', 'IFD0.Software=GONet ' + version, 
                          '-o', scratch_dir + image_file_name + '.jpg']
@@ -507,7 +516,7 @@ for filename in os.listdir(scratch_dir):
      # save its exif -  does not include raw (bayer) data
      exif = background.info['exif']
 
-     print(exif)
+     #print(exif)
 
      # open foreground.jpg and paste it to pi cam image
      foreground = Image.open(scratch_dir + "foreground.jpeg")
