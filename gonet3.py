@@ -37,7 +37,7 @@ br = 50
 
 
 #interval between images in milliseconds
-raspistill_tl = 2
+raspistill_tl = 0
 
 
 
@@ -496,10 +496,12 @@ command = ['/usr/bin/raspistill', '-v',
                          '-tl', str(raspistill_tl),
                          '-ISO', str(ISO),
                          '-drc', str(drc),
+                         '--timeout', '1',
                          '-awb', awb,
                          '-br', str(br),
                          '-r',
                          '-ts',
+                         '-set',
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
                          '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
                          '-x', 'GPS.GPSLatitude=' + exif_lat,
