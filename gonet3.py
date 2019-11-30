@@ -391,6 +391,7 @@ if gps_flag == 0:
    exif_lat_dir = 'X'
    exif_long = '000/1,00/1,00.0000/1'
    exif_long_dir = 'X' 
+   exif_alt = '0'
 
    for fl in glob.glob("/home/pi/Tools/Camera/GPS/GPGGA*"):
          os.remove(fl)
@@ -410,6 +411,7 @@ if gps_flag == 1:
    exif_lat_dir = 'X'
    exif_long = '000/1,00/1,00.0000/1'
    exif_long_dir = 'X'
+   exif_alt = '0'
 
 
 
