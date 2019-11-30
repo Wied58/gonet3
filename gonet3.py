@@ -37,7 +37,7 @@ br = 50
 
 
 #interval between images in milliseconds
-raspistill_tl = 2000
+raspistill_tl = 2
 
 
 
@@ -152,6 +152,14 @@ logfile.write("images = " + str(number_of_images) + " interval = " + str(raspist
 ###############################
 ##### Start of functions  #####
 ###############################
+
+def disk_stat(path):
+    disk = os.statvfs(path)
+    #percent = (disk.f_blocks - disk.f_bfree) * 100 / (disk.f_blocks -disk.f_bfree + disk.f_bavail) + 1
+    percent = (disk.f_bavail * 100.0) / disk.f_blocks
+    return percent
+
+##### end of parse gga #####
 
 def parse_gga(sdata):
      lat = sdata[2]
@@ -287,6 +295,13 @@ def nmea_cksum(data):
 #################################
 ##### Start of main program #####
 #################################
+
+print("free disk space = " + str(round(disk_stat('/'),2)) + "%")
+if (disk_stat('/')) < 10:
+  print("exitng due to full disk")
+  os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Disk_Full) &")
+  exit()
+
 
 start_looking_for_GPS_time  = time.time()
 setup_time = str(start_looking_for_GPS_time - run_start_time)
