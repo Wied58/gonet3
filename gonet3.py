@@ -224,6 +224,7 @@ def convert_raw_gps_fix_to_exif_lat(raw_gps_fix):
      sec = str(int(float(raw_lat[4:9]) * 60.0))
      #sec = str(float(raw_lat[5:9]) * 60.0 / 10000)
      return deg + "/1," + min + "/1," + sec + "/1"
+     #return deg + "/1," + min + "/1," + sec + "/1000"
 
 ##### end of convert_raw_gps_fix_to_exif_lat #####
 
@@ -239,8 +240,8 @@ def convert_raw_gps_fix_to_exif_long(raw_gps_fix):
      deg = raw_lat[0:3]
      min = raw_lat[3:5]
      sec = str(int((float(raw_lat[5:10]) * 60.0)))
-
      return deg + "/1," + min + "/1," + sec + "/1"
+     #return deg + "/1," + min + "/1," + sec + "/1000"
 
 ##### end of convert_raw_gps_fix_to_exif_long #####
 
