@@ -52,6 +52,11 @@ scratch_dir = "/home/pi/Tools/Camera/scratch/"
 image_dir = "/home/pi/images/"
 thumbs_dir = "/home/pi/thumbs/"
 
+# clean any left over junk from scratch dir
+for filename in os.listdir(scratch_dir):
+    print("Cleaning scratch dir: " + filename)
+    os.remove(scratch_dir + filename)
+
 # Here date and time is captured from GPS $GPRMC if available.
 # The time service from the network is shutdown, and system time is set from GPS value.
 # Then the network time service is restarted in case the device is being tested indoors
@@ -566,9 +571,6 @@ logfile.write("photo_count = " + str(photo_count) + "\n")
 
 os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Ready) &")
 
-for filename in os.listdir(scratch_dir):
-    print("Cleaning scratch dir: " + filename)
-    os.remove(scratch_dir + filename)
 
 
 finish_time = time.time()
