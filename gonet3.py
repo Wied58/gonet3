@@ -305,7 +305,7 @@ def nmea_cksum(data):
 print("free disk space = " + str(round(disk_stat('/'),2)) + "%")
 if (disk_stat('/')) < 10:
   print("exitng due to full disk")
-  os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Disk_Full) &")
+  os.system("(rm -rf /home/pi/Tools/Status/*; touch /home/pi/Tools/Status/Disk_Full; crontab -r) &")
   exit()
 
 
@@ -502,12 +502,13 @@ command = ['/usr/bin/raspistill', '-v',
                          '-tl', str(raspistill_tl),
                          '-ISO', str(ISO),
                          '-drc', str(drc),
-                         '--timeout', '1',
                          '-awb', awb,
                          '-br', str(br),
                          '-r',
                          '-ts',
-                         '-set',
+                         #'--timeout', '1',
+                         '-st',
+                         #'-set',
                          '-x', 'GPS.GPSLongitude=' + exif_long, 
                          '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
                          '-x', 'GPS.GPSLatitude=' + exif_lat,
