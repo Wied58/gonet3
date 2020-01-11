@@ -52,10 +52,21 @@ scratch_dir = "/home/pi/Tools/Camera/scratch/"
 image_dir = "/home/pi/images/"
 thumbs_dir = "/home/pi/thumbs/"
 
-# clean any left over junk from scratch dir
+
+# remove  any zero length file from scratch dir
+
 for filename in os.listdir(scratch_dir):
-    print("Cleaning scratch dir: " + filename)
-    os.remove(scratch_dir + filename)
+   if os.path.getsize(scratch_dir + filename) == 0:
+     print("Deleting zero length file " + scratch_dir +  filename)
+     os.remove(scratch_dir + filename)
+
+
+# move any reaming jpg files to image dir
+
+for filename in os.listdir(scratch_dir):
+    if filename.endswith(".jpg"):
+      print("Moving " + scratch_dir +  filename + " to " + image_dir + filename)
+      os.rename(scratch_dir + filename, image_dir + filename)
 
 # Here date and time is captured from GPS $GPRMC if available.
 # The time service from the network is shutdown, and system time is set from GPS value.
