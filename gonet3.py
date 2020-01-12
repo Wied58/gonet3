@@ -50,9 +50,16 @@ raspistill_t = 65000
 
 
 scratch_dir = "/home/pi/Tools/Camera/scratch/"
-image_dir = "/home/pi/images/"
-thumbs_dir = "/home/pi/thumbs/"
+if not os.path.exists(scratch_dir):
+    os.makedirs(scratch_dir)
 
+image_dir = "/home/pi/images/"
+if not os.path.exists(image_dir):
+    os.makedirs(image_dir)
+
+thumbs_dir = "/home/pi/thumbs/"
+if not os.path.exists(thumbs_dir):
+    os.makedirs(thumbs_dir)
 
 # remove  any zero length file from scratch dir
 
