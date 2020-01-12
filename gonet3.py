@@ -12,6 +12,7 @@ import glob
 import re
 from collections import deque
 import syslog
+from datetime import datetime
 
 
 # shutter speed (exposure time) in microseconds
@@ -159,8 +160,13 @@ subprocess.call('date')
 run_start_time = time.time()
 print ("run_start_time = " + str(run_start_time))
 
+
 logfile = open("/home/pi/Tools/Camera/gonet.log","a+")
-logfile.write("run_start_time = " + str(run_start_time) +"\n")
+logfile.write("run_start_time = " + str(run_start_time) + "\n")
+now = datetime.now()
+logfile.write("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S") + "\n")
+print ("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S"))
+
 logfile.write("images = " + str(number_of_images) + " interval = " + str(raspistill_tl) + " shutter = " + str(raspistill_ss) + "\n")
 
 
