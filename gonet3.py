@@ -48,6 +48,16 @@ raspistill_tl = 0
 #raspistill_t = (((raspistill_ss/1000) + raspistill_tl) * (number_of_images)) 
 raspistill_t = 65000
 
+run_start_time = time.time()
+print ("run_start_time = " + str(run_start_time))
+
+
+logfile = open("/home/pi/Tools/Camera/gonet.log","a+")
+logfile.write("run_start_time = " + str(run_start_time) + "\n")
+now = datetime.now()
+logfile.write("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S") + "\n")
+
+print ("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S"))
 
 scratch_dir = "/home/pi/Tools/Camera/scratch/"
 if not os.path.exists(scratch_dir):
@@ -66,6 +76,7 @@ if not os.path.exists(thumbs_dir):
 for filename in os.listdir(scratch_dir):
    if os.path.getsize(scratch_dir + filename) == 0:
      print("Deleting zero length file " + scratch_dir +  filename)
+     logfile.write(("Deleting zero length file " + scratch_dir +  filename) + "\n")
      os.remove(scratch_dir + filename)
 
 
@@ -74,6 +85,7 @@ for filename in os.listdir(scratch_dir):
 for filename in os.listdir(scratch_dir):
     if filename.endswith(".jpg"):
       print("Moving " + scratch_dir +  filename + " to " + image_dir + filename)
+      logfile,write(("Moving " + scratch_dir +  filename + " to " + image_dir + filename)  + "\n")
       os.rename(scratch_dir + filename, image_dir + filename)
 
 # Here date and time is captured from GPS $GPRMC if available.
@@ -168,11 +180,11 @@ run_start_time = time.time()
 print ("run_start_time = " + str(run_start_time))
 
 
-logfile = open("/home/pi/Tools/Camera/gonet.log","a+")
-logfile.write("run_start_time = " + str(run_start_time) + "\n")
-now = datetime.now()
-logfile.write("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S") + "\n")
-print ("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S"))
+#logfile = open("/home/pi/Tools/Camera/gonet.log","a+")
+#logfile.write("run_start_time = " + str(run_start_time) + "\n")
+#now = datetime.now()
+#logfile.write("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S") + "\n")
+#print ("run_start_time = " + now.strftime("%m/%d/%Y, %H:%M:%S"))
 
 logfile.write("images = " + str(number_of_images) + " interval = " + str(raspistill_tl) + " shutter = " + str(raspistill_ss) + "\n")
 
