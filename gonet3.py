@@ -30,8 +30,8 @@ ISO = 800
 drc = 'off'
 
 #White Balance: off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon
-awb = 'sun'
-
+awb = 'off'
+gains = (1.03125, 1.8086)
 
 #Brightness
 br = 50
@@ -539,6 +539,7 @@ command = ['/usr/bin/raspistill', '-v',
                          '-ISO', str(ISO),
                          '-drc', str(drc),
                          '-awb', awb,
+                         '-awbg', '1.03125, 1.8086',
                          '-br', str(br),
                          '-r',
                          '-ts',
