@@ -31,7 +31,9 @@ drc = 'off'
 
 #White Balance: off,auto,sun,cloud,shade,tungsten,fluorescent,incandescent,flash,horizon
 awb = 'off'
-gains = (1.03125, 1.8086)
+
+# Mannually set white balance gains
+white_balance_gains = '1.03125, 1.8086'
 
 #Brightness
 br = 50
@@ -523,6 +525,7 @@ img.rotate(90,expand = True).save(scratch_dir + 'foreground.jpeg', 'JPEG')
      
 # take a picture with pi cam!
 
+
 start_imaging_time = time.time()
 create_image_tag = str(start_imaging_time - start_create_image_tag_time)
 print ("create_image_tag = " + create_image_tag)
@@ -539,7 +542,8 @@ command = ['/usr/bin/raspistill', '-v',
                          '-ISO', str(ISO),
                          '-drc', str(drc),
                          '-awb', awb,
-                         '-awbg', '1.03125, 1.8086',
+                         #'-awbg', '1.03125, 1.8086',
+                         '-awbg', white_balance_gains,
                          '-br', str(br),
                          '-r',
                          '-ts',
