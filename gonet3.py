@@ -87,7 +87,7 @@ for filename in os.listdir(scratch_dir):
 for filename in os.listdir(scratch_dir):
     if filename.endswith(".jpg"):
       print("Moving " + scratch_dir +  filename + " to " + image_dir + filename)
-      logfile,write(("Moving " + scratch_dir +  filename + " to " + image_dir + filename)  + "\n")
+      logfile.write(("Moving " + scratch_dir +  filename + " to " + image_dir + filename)  + "\n")
       os.rename(scratch_dir + filename, image_dir + filename)
 
 # Here date and time is captured from GPS $GPRMC if available.
