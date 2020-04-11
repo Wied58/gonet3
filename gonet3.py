@@ -520,7 +520,7 @@ print (version)
 d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + version + " Exp: " + tag_raspistill_ss + " S"\
 + " ISO: " + str(ISO) + " WB: " + awb , font=font, fill=(255,255,255))
 # Next Line 
-d.text((20,70), strftime("%Y-%m-%d %H:%M:%S", gmtime()) + " UTC " + image_gps_fix , font=font, fill=(255,255,255))
+d.text((20,70), strftime("%y%m%d %H:%M:%S", gmtime()) + " UTC " + image_gps_fix , font=font, fill=(255,255,255))
 img.rotate(90,expand = True).save(scratch_dir + 'foreground.jpeg', 'JPEG')
      
 # take a picture with pi cam!
