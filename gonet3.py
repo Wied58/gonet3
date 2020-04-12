@@ -518,7 +518,7 @@ print (version)
 
 # White Text
 d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + version + " Exp: " + tag_raspistill_ss + " S"\
-+ " ISO: " + str(ISO) + " WB: " + awb , font=font, fill=(255,255,255))
++ " ISO: " + str(ISO) + " WB: " + white_balance_gains, font=font, fill=(255,255,255))
 # Next Line 
 d.text((20,70), strftime("%y%m%d %H:%M:%S", gmtime()) + " UTC " + image_gps_fix , font=font, fill=(255,255,255))
 img.rotate(90,expand = True).save(scratch_dir + 'foreground.jpeg', 'JPEG')
@@ -555,9 +555,9 @@ command = ['/usr/bin/raspistill', '-v',
                          '-x', 'GPS.GPSLatitude=' + exif_lat,
                          '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
                          '-x', 'GPS.GPSAltitude=' + exif_alt,
-                         #'-x', 'IFD0.Artist=GONet ' + version,
-                         '-x', 'IFD0.Software=' + socket.gethostname() + ' GONet ' + version, 
-                         #'-x', 'IFD0.Software=GONet ' + socket.gethostname() + " " + version, 
+                         #'-x', 'IFD0.Artist=GONet ' + white_balance_gains,
+                         '-x', 'IFD0.Software=' + socket.gethostname() + ' ' + version + ' WB: ' + white_balance_gains, 
+                         #'-x', 'IDF0.HostComputer= ' + socket.gethostname(),
                          '-o', scratch_dir + image_file_name + '.jpg']
 subprocess.call(command)
 
