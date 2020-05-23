@@ -69,7 +69,7 @@ image_dir = "/home/pi/images/"
 if not os.path.exists(image_dir):
     os.makedirs(image_dir)
 
-thumbs_dir = "/home/pi/thumbs/"
+thumbs_dir = "/home/pi/_sfpg_data/thumb/"
 if not os.path.exists(thumbs_dir):
     os.makedirs(thumbs_dir)
 
@@ -601,7 +601,7 @@ for filename in os.listdir(scratch_dir):
      # create thumnail here?
      MAX_SIZE = (160, 120) 
      background.thumbnail(MAX_SIZE)  
-     background.save(thumbs_dir + "th_" + filename, 'JPEG')
+     background.save(thumbs_dir + filename, 'JPEG')
 
      # clean up the scratch directory
      os.remove(scratch_dir + filename)
