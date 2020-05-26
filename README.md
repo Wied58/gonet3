@@ -1,15 +1,13 @@
 # gonet3.py
 
-### Version 15.5
-
+### Version 15.6
 ```
 added WB settings to exif and tag
 change date format to YYMMDD
 parametarized white balance gains
 manually set white balance
-
+```
 ### Version 15.5
-
 ```
 parameterized white balance gains
 manually set white balance
