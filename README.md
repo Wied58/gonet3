@@ -2,6 +2,7 @@
 
 ### Version 15.6
 ```
+incorporated changes of lines 72, and 604 to manage thumbnails
 added WB settings to exif and tag
 change date format to YYMMDD
 parametarized white balance gains
