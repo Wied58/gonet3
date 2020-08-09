@@ -531,7 +531,7 @@ create_image_tag = str(start_imaging_time - start_create_image_tag_time)
 print ("create_image_tag = " + create_image_tag)
 logfile.write("create_image_tag = " + create_image_tag + "\n")
 
-image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%03d"
+image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%d"
 print ("image_file_name = " + image_file_name)
 logfile.write("image_file_name = " + image_file_name + "\n")
 
