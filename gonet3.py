@@ -14,6 +14,9 @@ from collections import deque
 import syslog
 from datetime import datetime
 
+from picamera import PiCamera
+from time import sleep
+from fractions import Fraction
 
 # shutter speed (exposure time) in microseconds
 raspistill_ss = 6000000 
@@ -531,38 +534,78 @@ create_image_tag = str(start_imaging_time - start_create_image_tag_time)
 print ("create_image_tag = " + create_image_tag)
 logfile.write("create_image_tag = " + create_image_tag + "\n")
 
+########### end of raspistill  ##############
+
 #image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%03d"
 image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%d"
 print ("image_file_name = " + image_file_name)
 logfile.write("image_file_name = " + image_file_name + "\n")
 
-command = ['/usr/bin/raspistill', '-v',
-                         '-t', str(raspistill_t),
-                         '-ss', str(raspistill_ss),
-                         '-tl', str(raspistill_tl),
-                         '-ISO', str(ISO),
-                         '-drc', str(drc),
-                         '-awb', awb,
-                         #'-awbg', '1.03125, 1.8086',
-                         '-awbg', white_balance_gains,
-                         '-br', str(br),
-                         '-r',
-                         '-ts',
-                         #'--timeout', '1',
-                         '-st',
-                         #'-set',
-                         '-x', 'GPS.GPSLongitude=' + exif_long, 
-                         '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
-                         '-x', 'GPS.GPSLatitude=' + exif_lat,
-                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
-                         '-x', 'GPS.GPSAltitude=' + exif_alt,
-                         #'-x', 'IFD0.Artist=GONet ' + white_balance_gains,
-                         '-x', 'IFD0.Software=' + socket.gethostname() + ' ' + version + ' WB: ' + white_balance_gains, 
-                         #'-x', 'IDF0.HostComputer= ' + socket.gethostname(),
-                         '-o', scratch_dir + image_file_name + '.jpg']
-subprocess.call(command)
+#command = ['/usr/bin/raspistill', '-v',
+#                         '-t', str(raspistill_t),
+#                         '-ss', str(raspistill_ss),
+#                         '-tl', str(raspistill_tl),
+#                         '-ISO', str(ISO),
+#                         '-drc', str(drc),
+#                         '-awb', awb,
+#                         #'-awbg', '1.03125, 1.8086',
+#                         '-awbg', white_balance_gains,
+#                         '-br', str(br),
+#                         '-r',
+#                         '-ts',
+#                         #'--timeout', '1',
+#                         '-st',
+#                         #'-set',
+#                         '-x', 'GPS.GPSLongitude=' + exif_long, 
+#                         '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
+#                         '-x', 'GPS.GPSLatitude=' + exif_lat,
+#                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
+#                         '-x', 'GPS.GPSAltitude=' + exif_alt,
+#                         #'-x', 'IFD0.Artist=GONet ' + white_balance_gains,
+#                         '-x', 'IFD0.Software=' + socket.gethostname() + ' ' + version + ' WB: ' + white_balance_gains, 
+#                         #'-x', 'IDF0.HostComputer= ' + socket.gethostname(),
+#                         '-o', scratch_dir + image_file_name + '.jpg']
+#subprocess.call(command)
+########### end of raspistill  ##############
+########### Start of picamera ##############
+
+camera = PiCamera()
+
+# Set a framerate of 1/6fps, then set shutter
+# speed to 6s and ISO to 800
+camera.framerate = Fraction(1, 6)
+camera.shutter_speed = raspistill_ss
+camera.exposure_mode = 'off'
+camera.iso = ISO
+camera.awb_mode = awb
+#camera.awb_gains = (1.03125, 1.8086)
+camera.awb_gains = (1.03125, 1.8086)
+
+camera.brightness = br
 
 
+camera.exif_tags['IFD0.Copyright'] = 'Copyright (c) Just a Test'
+camera.exif_tags['IFD0.Artist'] = 'Picaso'
+camera.exif_tags['IFD0.Software'] = socket.gethostname() + ' ' + version + ' WB: ' + str(white_balance_gains)
+
+camera.exif_tags['GPS.GPSLongitude'] = exif_long
+camera.exif_tags['GPS.GPSLongitudeRef'] = exif_long_dir
+camera.exif_tags['GPS.GPSLatitude'] = exif_lat
+camera.exif_tags['GPS.GPSLatitudeRef'] = exif_lat_dir
+camera.exif_tags['GPS.GPSAltitude'] = exif_alt
+
+for x in range(5):
+   filename = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S_%s", gmtime()))  + ".jpg"
+   print(scratch_dir + filename)
+   camera.capture(scratch_dir +filename, bayer=True)
+
+
+# The images collected with picamera yields a file about 2m small than raspisill
+
+print("Closing Camera")
+camera.close()
+
+######### End of picamera ###########
 
 start_post_processing_time = time.time()
 imaging_time = str(start_post_processing_time - start_imaging_time)
