@@ -580,12 +580,10 @@ camera.iso = ISO
 camera.awb_mode = awb
 #camera.awb_gains = (1.03125, 1.8086)
 camera.awb_gains = (1.03125, 1.8086)
-
+camera.resolution = (2592, 1944)
 camera.brightness = br
 
 
-camera.exif_tags['IFD0.Copyright'] = 'Copyright (c) Just a Test'
-camera.exif_tags['IFD0.Artist'] = 'Picaso'
 camera.exif_tags['IFD0.Software'] = socket.gethostname() + ' ' + version + ' WB: ' + str(white_balance_gains)
 
 camera.exif_tags['GPS.GPSLongitude'] = exif_long
