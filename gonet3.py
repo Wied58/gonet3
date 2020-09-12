@@ -541,31 +541,31 @@ image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", g
 print ("image_file_name = " + image_file_name)
 logfile.write("image_file_name = " + image_file_name + "\n")
 
-#command = ['/usr/bin/raspistill', '-v',
-#                         '-t', str(raspistill_t),
-#                         '-ss', str(raspistill_ss),
-#                         '-tl', str(raspistill_tl),
-#                         '-ISO', str(ISO),
-#                         '-drc', str(drc),
-#                         '-awb', awb,
-#                         #'-awbg', '1.03125, 1.8086',
-#                         '-awbg', white_balance_gains,
-#                         '-br', str(br),
-#                         '-r',
-#                         '-ts',
-#                         #'--timeout', '1',
-#                         '-st',
-#                         #'-set',
-#                         '-x', 'GPS.GPSLongitude=' + exif_long, 
-#                         '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
-#                         '-x', 'GPS.GPSLatitude=' + exif_lat,
-#                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
-#                         '-x', 'GPS.GPSAltitude=' + exif_alt,
-#                         #'-x', 'IFD0.Artist=GONet ' + white_balance_gains,
-#                         '-x', 'IFD0.Software=' + socket.gethostname() + ' ' + version + ' WB: ' + white_balance_gains, 
-#                         #'-x', 'IDF0.HostComputer= ' + socket.gethostname(),
-#                         '-o', scratch_dir + image_file_name + '.jpg']
-#subprocess.call(command)
+command = ['/usr/bin/raspistill', '-v',
+                         '-t', str(raspistill_t),
+                         '-ss', str(raspistill_ss),
+                         '-tl', str(raspistill_tl),
+                         '-ISO', str(ISO),
+                         '-drc', str(drc),
+                         '-awb', awb,
+                         #'-awbg', '1.03125, 1.8086',
+                         '-awbg', white_balance_gains,
+                         '-br', str(br),
+                         '-r',
+                         '-ts',
+                         #'--timeout', '1',
+                         '-st',
+                         #'-set',
+                         '-x', 'GPS.GPSLongitude=' + exif_long, 
+                         '-x', 'GPS.GPSLongitudeRef=' + exif_long_dir,
+                         '-x', 'GPS.GPSLatitude=' + exif_lat,
+                         '-x', 'GPS.GPSLatitudeRef=' + exif_lat_dir,
+                         '-x', 'GPS.GPSAltitude=' + exif_alt,
+                         #'-x', 'IFD0.Artist=GONet ' + white_balance_gains,
+                         '-x', 'IFD0.Software=' + socket.gethostname() + ' ' + version + ' WB: ' + white_balance_gains, 
+                         #'-x', 'IDF0.HostComputer= ' + socket.gethostname(),
+                         '-o', scratch_dir + image_file_name + '.jpg']
+subprocess.call(command)
 ########### end of raspistill  ##############
 ########### Start of picamera ##############
 
