@@ -573,25 +573,25 @@ camera = PiCamera()
 sleep(2)
 # Set a framerate of 1/6fps, then set shutter
 # speed to 6s and ISO to 800
-#camera.framerate = Fraction(1, 6)
+camera.framerate = Fraction(1, 6)
 camera.shutter_speed = raspistill_ss
-#camera.exposure_mode = 'off'
 camera.iso = ISO
-camera.drc_strength='off'
+#camera.drc_strength='off'
+camera.drc_strength=drc
 camera.awb_mode = awb
-#camera.awb_gains = (1.03125, 1.8086)
 camera.awb_gains = (1.03125, 1.8086)
-camera.resolution = (2592, 1944)
 camera.brightness = br
 camera.still_stats = True
+camera.resolution = (2592, 1944)
 
-camera.exif_tags['IFD0.Software'] = socket.gethostname() + ' ' + version + ' WB: ' + str(white_balance_gains)
 
 camera.exif_tags['GPS.GPSLongitude'] = exif_long
 camera.exif_tags['GPS.GPSLongitudeRef'] = exif_long_dir
 camera.exif_tags['GPS.GPSLatitude'] = exif_lat
 camera.exif_tags['GPS.GPSLatitudeRef'] = exif_lat_dir
 camera.exif_tags['GPS.GPSAltitude'] = exif_alt
+
+camera.exif_tags['IFD0.Software'] = socket.gethostname() + ' ' + version + ' WB: ' + str(white_balance_gains)
 
 for x in range(5):
    filename = "P_" + socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S_%s", gmtime()))  + ".jpg"
