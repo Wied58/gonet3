@@ -534,10 +534,10 @@ create_image_tag = str(start_imaging_time - start_create_image_tag_time)
 print ("create_image_tag = " + create_image_tag)
 logfile.write("create_image_tag = " + create_image_tag + "\n")
 
-########### end of raspistill  ##############
+########### start of raspistill  ##############
 
 #image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%03d"
-image_file_name = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%d"
+image_file_name = "R_" + socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S", gmtime())) + "_%d"
 print ("image_file_name = " + image_file_name)
 logfile.write("image_file_name = " + image_file_name + "\n")
 
@@ -570,19 +570,20 @@ subprocess.call(command)
 ########### Start of picamera ##############
 
 camera = PiCamera()
-
+sleep(2)
 # Set a framerate of 1/6fps, then set shutter
 # speed to 6s and ISO to 800
-camera.framerate = Fraction(1, 6)
+#camera.framerate = Fraction(1, 6)
 camera.shutter_speed = raspistill_ss
-camera.exposure_mode = 'off'
+#camera.exposure_mode = 'off'
 camera.iso = ISO
+camera.drc_strength='off'
 camera.awb_mode = awb
 #camera.awb_gains = (1.03125, 1.8086)
 camera.awb_gains = (1.03125, 1.8086)
 camera.resolution = (2592, 1944)
 camera.brightness = br
-
+camera.still_stats = True
 
 camera.exif_tags['IFD0.Software'] = socket.gethostname() + ' ' + version + ' WB: ' + str(white_balance_gains)
 
@@ -593,7 +594,7 @@ camera.exif_tags['GPS.GPSLatitudeRef'] = exif_lat_dir
 camera.exif_tags['GPS.GPSAltitude'] = exif_alt
 
 for x in range(5):
-   filename = socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S_%s", gmtime()))  + ".jpg"
+   filename = "P_" + socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S_%s", gmtime()))  + ".jpg"
    print(scratch_dir + filename)
    camera.capture(scratch_dir +filename, bayer=True)
 
