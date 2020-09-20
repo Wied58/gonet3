@@ -567,6 +567,9 @@ command = ['/usr/bin/raspistill', '-v',
                          '-o', scratch_dir + image_file_name + '.jpg']
 subprocess.call(command)
 ########### end of raspistill  ##############
+
+
+
 ########### Start of picamera ##############
 
 camera = PiCamera()
@@ -576,7 +579,6 @@ sleep(2)
 camera.framerate = Fraction(1, 6)
 camera.shutter_speed = raspistill_ss
 camera.iso = ISO
-#camera.drc_strength='off'
 camera.drc_strength=drc
 camera.awb_mode = awb
 camera.awb_gains = (1.03125, 1.8086)
