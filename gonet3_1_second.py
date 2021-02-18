@@ -19,7 +19,7 @@ from time import sleep
 from fractions import Fraction
 
 # shutter speed (exposure time) in microseconds
-raspistill_ss = 6000000 
+raspistill_ss = 1000000 
 
 tag_raspistill_ss = str(round(raspistill_ss/1000000, 2))
 
@@ -51,7 +51,7 @@ raspistill_tl = 0
 # Exposure time converted to milliseconds + interval between images X number of images + an extra interval
 #raspistill_t = (((raspistill_ss/1000) + raspistill_tl) * (number_of_images +1)) 
 #raspistill_t = (((raspistill_ss/1000) + raspistill_tl) * (number_of_images)) 
-raspistill_t = 65000
+raspistill_t = 5000
 
 run_start_time = time.time()
 print ("run_start_time = " + str(run_start_time))
