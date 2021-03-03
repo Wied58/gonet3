@@ -516,12 +516,14 @@ d = ImageDraw.Draw(img)
 # Black Text
 #d.text((20,10), "Adler / Far Horizons GONet hostname: " + socket.gethostname(), font=font, fill=(0,0,0)) 
 
+# Old version check remove after further testing 
 ##version  = ''.join(os.listdir('/home/pi/Tools/Version'))
 #version  = ''.join(glob.glob(os.path.join('/home/pi/Tools/Version', '*'))).split("/")[5]
+# end of old version check
 
 version_dir = os.listdir("/home/pi/Tools/Version")
-print(version_dir)
-print (len(version_dir))
+#print(version_dir)
+#print (len(version_dir))
 if len(version_dir) == 0: 
    print("Empty directory using UNK")
    version = 'UNK'
