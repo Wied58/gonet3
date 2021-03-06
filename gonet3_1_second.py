@@ -517,8 +517,21 @@ d = ImageDraw.Draw(img)
 #d.text((20,10), "Adler / Far Horizons GONet hostname: " + socket.gethostname(), font=font, fill=(0,0,0)) 
 
 #version  = ''.join(os.listdir('/home/pi/Tools/Version'))
-version  = ''.join(glob.glob(os.path.join('/home/pi/Tools/Version', '*'))).split("/")[5]
+#version  = ''.join(glob.glob(os.path.join('/home/pi/Tools/Version', '*'))).split("/")[5]
+#print (version)
+
+
+version_dir = os.listdir("/home/pi/Tools/Version")
+#print(version_dir)
+#print (len(version_dir))
+if len(version_dir) == 0:
+   print("Empty directory using UNK")
+   version = 'UNK'
+   #os.system('touch {}'.format("/home/pi/Tools/Version/UNK"))
+else:
+   version  = ''.join(glob.glob(os.path.join('/home/pi/Tools/Version', '*'))).split("/")[5]
 print (version)
+
 
 # White Text
 d.text((20,10), "Adler / Far Horizons  " + socket.gethostname() + " " + version + " Exp: " + tag_raspistill_ss + " S"\
