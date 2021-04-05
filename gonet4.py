@@ -607,7 +607,18 @@ camera.exif_tags['GPS.GPSLatitude'] = exif_lat
 camera.exif_tags['GPS.GPSLatitudeRef'] = exif_lat_dir
 camera.exif_tags['GPS.GPSAltitude'] = exif_alt
 
+
 camera.exif_tags['IFD0.Software'] = socket.gethostname() + ' ' + version + ' WB: ' + str(white_balance_gains)
+camera.exif_tags['IFD0.ImageDescription'] = 'some number'
+
+
+
+camera.exif_tags['EXIF.UserComment'] = 'some other number'
+camera.exif_tags['EXIF.HostComputer'] = 'some number'
+camera.exif_tags['IFD0.CameraSerialNumber'] = 'some number'
+camera.exif_tags['EXIF.BodySerialNumber'] = 'some number'
+camera.exif_tags['EXIF.SerialNumber'] = 'some number'
+
 
 for x in range(5):
    filename = "P_" + socket.gethostname()[-3:] + "_" + (strftime("%y%m%d_%H%M%S_%s", gmtime()))  + ".jpg"

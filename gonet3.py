@@ -14,7 +14,7 @@ from collections import deque
 import syslog
 from datetime import datetime
 
-from picamera import PiCamera
+#from picamera import PiCamera
 from time import sleep
 from fractions import Fraction
 
